@@ -1,11 +1,13 @@
 package error
 
-type ErrorType struct {
+//StatusMsgError represents the status and message of the error response
+type StatusMsgError struct {
 	Status  int
 	Message string
 }
 
-var ErrorResponse = map[string]ErrorType{
+//ErrorResponse represents all errors response from the API
+var ErrorResponse = map[string]StatusMsgError{
 	"readFails": {
 		Status:  500,
 		Message: "falha interna na leitura de dados",

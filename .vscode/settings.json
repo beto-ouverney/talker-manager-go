@@ -1,4 +1,10 @@
 {
   "go.inferGopath": false,
-  "go.lintTool": "golangci-lint"
+  "go.lintTool": "golangci-lint",
+  "go.languageServerExperimentalFeatures": {
+    "diagnostics": false
+  },
+  "go.useLanguageServer": false,
+  "go.formatTool": "goimports",
+  "go.autocompleteUnimportedPackages": true
 }
