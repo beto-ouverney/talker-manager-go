@@ -21,3 +21,20 @@ func (t *TalkerRepository) GetAllTalkers() (*[]talker.Talker, error) {
 	err = json.Unmarshal(jsonFile, &talkers)
 	return talkers, err
 }
+
+//GetTalkerByID is a function that returns a talker by id
+func (t *TalkerRepository) GetTalkerByID(id int) (*talker.Talker, error) {
+	jsonFile, err := readJSON()
+	if err != nil {
+		return nil, err
+	}
+	var talkers []talker.Talker
+	err = json.Unmarshal(jsonFile, &talkers)
+	var talker *talker.Talker
+	for _, v := range talkers {
+		if v.ID == id {
+			talker = &v
+		}
+	}
+	return talker, err
+}

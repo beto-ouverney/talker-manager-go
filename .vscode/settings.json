@@ -6,5 +6,6 @@
   },
   "go.useLanguageServer": false,
   "go.formatTool": "goimports",
-  "go.autocompleteUnimportedPackages": true
+  "go.autocompleteUnimportedPackages": true,
+  "go.lintOnSave": "workspace"
 }

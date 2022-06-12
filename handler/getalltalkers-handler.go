@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 
 	talkerintegration "github.com/beto-ouverney/talker-manager-go/talker/integration"
@@ -13,9 +14,11 @@ func GetAllTalkersHandler(w http.ResponseWriter, r *http.Request) {
 		talkers, err := talkerIntegration.GetAllTalkers()
 		if err != nil {
 		}
+		fmt.Println("ALLL")
 		w.WriteHeader(200)
 		w.Header().Set("Content-Type", "application/json")
-		w.Write([]byte(talkers))
+		fmt.Fprintf(w, "%s", talkers)
+    w.Write([]byte(talkers))
 
 	}
 }
