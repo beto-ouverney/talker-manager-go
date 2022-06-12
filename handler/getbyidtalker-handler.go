@@ -16,9 +16,17 @@ func GetTalkerByIDHandler(w http.ResponseWriter, r *http.Request) {
 		talker, err := talkerIntegration.GetTalkerByID(id)
 		if err != nil {
 		}
+		if talker != nil {
 		w.WriteHeader(200)
 		w.Header().Set("Content-Type", "application/json")
 		talkerJSON, err := json.Marshal(talker)
+		if err != nil {
+		}
 		w.Write(talkerJSON)
+		} else {
+			w.WriteHeader(404)
+		w.Header().Set("Content-Type", "application/json")
+		w.Write([]byte("{\"message\":\"Talker not found\"}"))
+		}
 	}
 }
