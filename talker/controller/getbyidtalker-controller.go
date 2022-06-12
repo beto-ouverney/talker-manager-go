@@ -1,7 +1,7 @@
 package talkercontroller
 
 import (
-	"encoding/json" 
+	"encoding/json"
 	"fmt"
 )
 
