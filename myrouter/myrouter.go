@@ -6,6 +6,7 @@ import (
 	"regexp"
 )
 
+//RouterEntry is a struct that holds the method, path and handlerFunc
 type RouteEntry struct {
 	Path        *regexp.Regexp
 	Method      string
@@ -53,4 +54,3 @@ func (rtr *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	http.NotFound(w, r)
 }
-

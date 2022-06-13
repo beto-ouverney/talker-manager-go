@@ -1,4 +1,4 @@
-package user
+package userentity
 
 //User represents the user
 type User struct {
