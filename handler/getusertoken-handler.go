@@ -14,7 +14,6 @@ func GetUserTokenHandler(w http.ResponseWriter, r *http.Request) {
 	response := []byte("{\"message\":\"Error\"}")
 	if r.Method == http.MethodPost {
 		decoder := json.NewDecoder(r.Body)
-		defer r.Body.Close()
 		var user userentity.User
 		err := decoder.Decode(&user)
 		if err != nil {

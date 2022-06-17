@@ -11,14 +11,10 @@ import (
 //GetTalkerByIDHandler is a handler for the GET /talkers/:id endpoint.
 func GetTalkerByIDHandler(w http.ResponseWriter, r *http.Request) {
 	status := 500
-	var response []byte
-	response = []byte("{\"message\":\"Error\"}")
+	response := []byte("{\"message\":\"Error\"}")
 	if r.Method == http.MethodGet {
 		talkerIntegration := talkerintegration.TalkersIntegration()
 		id, err := strconv.Atoi(URLParam(r, "id"))
-		if err != nil {
-			errorReturn(w, r, 500, err.Error())
-		}
 		talker, err := talkerIntegration.GetTalkerByID(id)
 		if err != nil {
 			errorReturn(w, r, 500, err.Error())
@@ -33,13 +29,11 @@ func GetTalkerByIDHandler(w http.ResponseWriter, r *http.Request) {
 		} else {
 			status = 404
 
-			response = []byte("{\"message\":\"Talker not found\"}")
+			w.Write([]byte("{\"message\":\"Talker not found\"}"))
 		}
 	}
-	_, err := w.Write(response)
-	if err != nil {
-		errorReturn(w, r, 500, err.Error())
-	}
+
 	w.WriteHeader(status)
 	w.Header().Set("Content-Type", "application/json")
+	w.Write(response)
 }
