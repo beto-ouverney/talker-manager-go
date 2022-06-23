@@ -2,6 +2,7 @@ package talkerrepository
 
 import (
 	"encoding/json"
+	"sort"
 
 	talker "github.com/beto-ouverney/talker-manager-go/talker/entity"
 )
@@ -10,6 +11,7 @@ import (
 type ITalkerRepository interface {
 	GetAllTalkers() (*[]talker.Talker, error)
 	GetTalkerByID(id int) (*talker.Talker, error)
+	AddTalker(newTalker *talker.Talker) (*talker.Talker, error)
 }
 
 //TalkerRepository is the implementation of the talker repository
@@ -43,4 +45,22 @@ func (t *TalkerRepository) GetTalkerByID(id int) (*talker.Talker, error) {
 		}
 	}
 	return talker, err
+}
+
+// AddTalker adds a new talker to the list of talkers
+func (t *TalkerRepository) AddTalker(newTalker *talker.Talker) (*talker.Talker, error) {
+	jsonFile, err := readJSON()
+	if err == nil {
+		var talkers []talker.Talker
+		err = json.Unmarshal(jsonFile, &talkers)
+		sort.Slice(talkers, func(i, j int) bool { return talkers[i].ID < talkers[j].ID })
+		lastTalker := talkers[len(talkers)-1]
+		newTalker.ID = lastTalker.ID + 1
+		talkers = append(talkers, *newTalker)
+		jsonFile, err = json.Marshal(talkers)
+		if err == nil {
+			err = writeJSON(jsonFile)
+		}
+	}
+	return newTalker, err
 }

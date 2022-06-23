@@ -8,7 +8,7 @@ import (
 	userintegration "github.com/beto-ouverney/talker-manager-go/user/integration"
 )
 
-//GetUserTokenHandler is a handler for the GetUserToken usecase
+//GetUserTokenHandler is a handler for take the user's credentials and return a token
 func GetUserTokenHandler(w http.ResponseWriter, r *http.Request) {
 	status := 500
 	response := []byte("{\"message\":\"Error\"}")

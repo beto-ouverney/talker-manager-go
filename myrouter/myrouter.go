@@ -9,9 +9,10 @@ import (
 	"regexp"
 )
 
+//Middleware represents a type that can be used as a middleware
 type Middleware func(decoder *json.Decoder) (ok bool, status int, message string)
 
-//RouterEntry is a struct that holds the method, path and handlerFunc
+//RouteEntry is a struct that holds the method, path and handlerFunc
 type RouteEntry struct {
 	Path        *regexp.Regexp
 	Method      string
@@ -25,6 +26,7 @@ type MyResponseWriter struct {
 	statusCode int
 }
 
+//Match is a function that returns the params from the path
 func (ent *RouteEntry) Match(r *http.Request) map[string]string {
 	match := ent.Path.FindStringSubmatch(r.URL.Path)
 	if match == nil {
@@ -55,6 +57,7 @@ func (rtr *Router) Route(method, path string, middlewares []Middleware, handlerF
 	rtr.routes = append(rtr.routes, e)
 }
 
+//ServerHTTP is a function that returns the handler for the router
 func (rtr *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	for _, e := range rtr.routes {
 		params := e.Match(r)
@@ -82,7 +85,7 @@ func (rtr *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 			}
 		}
-		if ok {
+		if ok || e.Middlewares == nil {
 			// Create new request with params stored in context
 			ctx := context.WithValue(r.Context(), "params", params)
 			e.HandlerFunc.ServeHTTP(w, r.WithContext(ctx))
