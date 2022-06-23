@@ -53,13 +53,15 @@ func (t *TalkerRepository) AddTalker(newTalker *talker.Talker) (*talker.Talker, 
 	if err == nil {
 		var talkers []talker.Talker
 		err = json.Unmarshal(jsonFile, &talkers)
-		sort.Slice(talkers, func(i, j int) bool { return talkers[i].ID < talkers[j].ID })
-		lastTalker := talkers[len(talkers)-1]
-		newTalker.ID = lastTalker.ID + 1
-		talkers = append(talkers, *newTalker)
-		jsonFile, err = json.Marshal(talkers)
 		if err == nil {
-			err = writeJSON(jsonFile)
+			sort.Slice(talkers, func(i, j int) bool { return talkers[i].ID < talkers[j].ID })
+			lastTalker := talkers[len(talkers)-1]
+			newTalker.ID = lastTalker.ID + 1
+			talkers = append(talkers, *newTalker)
+			jsonFile, err = json.MarshalIndent(talkers, "", "    ")
+			if err == nil {
+				err = writeJSON(jsonFile)
+			}
 		}
 	}
 	return newTalker, err
