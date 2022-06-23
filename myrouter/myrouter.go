@@ -1,8 +1,10 @@
 package myrouter
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
+	"io/ioutil"
 	"net/http"
 	"regexp"
 )
@@ -63,6 +65,14 @@ func (rtr *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		var status int
 		var message string
 
+		buf, _ := ioutil.ReadAll(r.Body)
+		bodyCopy1 := ioutil.NopCloser(bytes.NewBuffer(buf))
+		bodyCopy2 := ioutil.NopCloser(bytes.NewBuffer(buf))
+
+		r.Body = bodyCopy1 // OK since bodyCopy1 implements the io.ReadCloser interface
+
+		decoder := json.NewDecoder(bodyCopy2)
+
 		if e.Middlewares != nil {
 			for _, middleware := range e.Middlewares {
 				ok, status, message = middleware(decoder)
@@ -78,7 +88,6 @@ func (rtr *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			e.HandlerFunc.ServeHTTP(w, r.WithContext(ctx))
 		} else {
 
-			defer r.Body.Close()
 			w.WriteHeader(status)
 			_, _ = w.Write([]byte("{\"message\":\"" + message + "\"}"))
 		}
