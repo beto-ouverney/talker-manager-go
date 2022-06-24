@@ -13,6 +13,7 @@ func main() {
 	router.Route(http.MethodGet, `/talkers/(?P<id>\d+)`, nil, handler.GetTalkerByIDHandler)
 	router.Route(http.MethodGet, "/talkers", nil, handler.GetAllTalkersHandler)
 	router.Route(http.MethodPost, "/login", []myrouter.Middleware{middleware.UserValidate}, handler.GetUserTokenHandler)
+	router.Route(http.MethodPut, `/talker/(?P<id>\d+)`, []myrouter.Middleware{middleware.TokenValidate, middleware.TalkerValidate}, handler.EditTalkerHandler)
 	router.Route(http.MethodGet, "/talker", []myrouter.Middleware{middleware.TokenValidate, middleware.TalkerValidate}, handler.AddTalkerHandler)
 	http.ListenAndServe(":8080", router)
 }

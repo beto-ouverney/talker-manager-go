@@ -10,6 +10,7 @@ type ITalkersUseCase interface {
 	GetAllTalkers() (*[]talker.Talker, error)
 	GetTalkerByID(id int) (*talker.Talker, error)
 	AddTalker(newTalker *talker.Talker) (*talker.Talker, error)
+	EditTalker(newTalker *talker.Talker) (*talker.Talker, error)
 }
 
 //TalkersUseCase is the implementation of the talkers use case
