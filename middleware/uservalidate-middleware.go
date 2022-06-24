@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"encoding/json"
-	"fmt"
 	"regexp"
 
 	userentity "github.com/beto-ouverney/talker-manager-go/user/entity"
@@ -32,7 +31,6 @@ func userValidations(email string, password string) (ok bool, status int, messag
 
 //UserValidate is a middleware that validates the user
 func UserValidate(header map[string][]string, decoder *json.Decoder) (ok bool, status int, message string) {
-	fmt.Println("MIDDLEWARE")
 	var user userentity.User
 	err := decoder.Decode(&user)
 	if err != nil {
