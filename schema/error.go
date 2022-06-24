@@ -1,4 +1,4 @@
-package error
+package errorschema
 
 //StatusMsgError represents the status and message of the error response
 type StatusMsgError struct {
@@ -10,70 +10,70 @@ type StatusMsgError struct {
 var ErrorResponse = map[string]StatusMsgError{
 	"readFails": {
 		Status:  500,
-		Message: "falha interna na leitura de dados",
+		Message: "internal failure to read data",
 	},
 	"writeFails": {
 		Status:  500,
-		Message: "falha interna na escrita dos dados",
+		Message: "internal failure to write data",
 	},
 	"talkerNotFound": {
 		Status:  404,
-		Message: "Pessoa palestrante não encontrada",
+		Message: "Speaker not found",
 	},
 	"invalidId": {
 		Status:  400,
-		Message: "Id deve ser um número",
+		Message: "ID must be a number",
 	},
 	"emailIsRequired": {
 		Status:  400,
-		Message: `O campo "email" é obrigatório`,
+		Message: `The "email" field is required`,
 	},
 	"invalidEmail": {
 		Status:  400,
-		Message: `O "email" deve ter o formato "email@email.com"`,
+		Message: `The "email" must have the format "email@email.com"`,
 	},
 	"passwordIsRequired": {
 		Status:  400,
-		Message: `O campo "password" é obrigatório`,
+		Message: `The password is required`,
 	},
 	"invalidPassword": {
 		Status:  400,
-		Message: `O "password" deve ter pelo menos 6 caracteres`,
+		Message: `The "password" must be at least 6 characters long`,
 	},
 	"tokenNotFound": {
 		Status:  401,
-		Message: "Token não encontrado",
+		Message: "Token not found",
 	},
 	"invalidToken": {
 		Status:  401,
-		Message: "Token inválido",
+		Message: "Token invalid",
 	},
 	"nameIsRequired": {
 		Status:  400,
-		Message: `O campo "name" é obrigatório`,
+		Message: `The "name" field is required`,
 	},
 	"invalidName": {
 		Status:  400,
-		Message: `O "name" deve ter pelo menos 3 caracteres`,
+		Message: `The "name" must be at least 3 caracters long`,
 	},
 	"ageIsRequired": {
 		Status:  400,
-		Message: `O campo "age" é obrigatório`,
+		Message: `The "age" field is required`,
 	},
 	"invalidAge": {
 		Status:  400,
-		Message: "A pessoa palestrante deve ser maior de idade",
+		Message: "The speaker must be of legal age",
 	},
 	"talkIsRequired": {
 		Status:  400,
-		Message: `O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios`,
+		Message: `The "talk" field is mandatory and "watchedAt" and "rate" cannot be empty`,
 	},
 	"invalidWathedAt": {
 		Status:  400,
-		Message: `O campo "watchedAt" deve ter o formato "dd/mm/aaaa"`,
+		Message: `The "watchedAt" field must have the format "dd/mm/yyyy"`,
 	},
 	"invalidRate": {
 		Status:  400,
-		Message: `O campo "rate" deve ser um inteiro de 1 à 5`,
+		Message: `The "rate" field must be an integer from 1 to 5`,
 	},
 }

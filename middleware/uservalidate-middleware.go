@@ -31,7 +31,7 @@ func userValidations(email string, password string) (ok bool, status int, messag
 }
 
 //UserValidate is a middleware that validates the user
-func UserValidate(decoder *json.Decoder) (ok bool, status int, message string) {
+func UserValidate(header map[string][]string, decoder *json.Decoder) (ok bool, status int, message string) {
 	fmt.Println("MIDDLEWARE")
 	var user userentity.User
 	err := decoder.Decode(&user)

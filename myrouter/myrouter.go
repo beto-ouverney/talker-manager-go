@@ -10,7 +10,7 @@ import (
 )
 
 //Middleware represents a type that can be used as a middleware
-type Middleware func(decoder *json.Decoder) (ok bool, status int, message string)
+type Middleware func(header map[string][]string, body *json.Decoder) (ok bool, status int, message string)
 
 //RouteEntry is a struct that holds the method, path and handlerFunc
 type RouteEntry struct {
@@ -73,12 +73,11 @@ func (rtr *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		bodyCopy2 := ioutil.NopCloser(bytes.NewBuffer(buf))
 
 		r.Body = bodyCopy1 // OK since bodyCopy1 implements the io.ReadCloser interface
-
-		decoder := json.NewDecoder(bodyCopy2)
+		body := json.NewDecoder(bodyCopy2)
 
 		if e.Middlewares != nil {
 			for _, middleware := range e.Middlewares {
-				ok, status, message = middleware(decoder)
+				ok, status, message = middleware(r.Header, body)
 				if !ok {
 					break
 				}
