@@ -11,6 +11,7 @@ type ITalkersUseCase interface {
 	GetTalkerByID(id int) (*talker.Talker, error)
 	AddTalker(newTalker *talker.Talker) (*talker.Talker, error)
 	EditTalker(newTalker *talker.Talker) (*talker.Talker, error)
+	DeleteTalker(id int) error
 }
 
 //TalkersUseCase is the implementation of the talkers use case

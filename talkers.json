@@ -124,23 +124,5 @@
             "watchedAt": "22/10/2019",
             "rate": 5
         }
-    },
-    {
-        "name": "Danielle Santos",
-        "age": 56,
-        "id": 15,
-        "talk": {
-            "watchedAt": "22/10/2019",
-            "rate": 5
-        }
-    },
-    {
-        "name": "Dadaoo",
-        "age": 56,
-        "id": 16,
-        "talk": {
-            "watchedAt": "22/10/2019",
-            "rate": 5
-        }
     }
 ]

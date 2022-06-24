@@ -14,6 +14,7 @@ type ITalkerRepository interface {
 	GetTalkerByID(id int) (*talker.Talker, error)
 	AddTalker(newTalker *talker.Talker) (*talker.Talker, error)
 	EditTalker(newTalker *talker.Talker) (*talker.Talker, error)
+	DeleteTalker(id int) error
 }
 
 //TalkerRepository is the implementation of the talker repository
@@ -89,4 +90,24 @@ func (t *TalkerRepository) EditTalker(newTalker *talker.Talker) (*talker.Talker,
 		}
 	}
 	return newTalker, err
+}
+
+func (t *TalkerRepository) DeleteTalker(id int) error {
+	jsonFile, err := readJSON()
+	if err == nil {
+		var talkers []talker.Talker
+		err = json.Unmarshal(jsonFile, &talkers)
+		if err == nil {
+			for i, v := range talkers {
+				if v.ID == id {
+					talkers = append(talkers[:i], talkers[i+1:]...)
+				}
+			}
+			jsonFile, err = json.MarshalIndent(talkers, "", "    ")
+			if err == nil {
+				err = writeJSON(jsonFile)
+			}
+		}
+	}
+	return err
 }

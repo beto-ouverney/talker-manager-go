@@ -32,6 +32,9 @@ func (ent *RouteEntry) Match(r *http.Request) map[string]string {
 	if match == nil {
 		return nil // No match found
 	}
+	if ent.Method != r.Method {
+		return nil // Method not allowed
+	}
 	// Create a map to store URL parameters in
 	params := make(map[string]string)
 	groupNames := ent.Path.SubexpNames()
