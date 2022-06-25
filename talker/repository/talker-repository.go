@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"sort"
+	"strings"
 
 	talker "github.com/beto-ouverney/talker-manager-go/talker/entity"
 )
@@ -15,6 +16,7 @@ type ITalkerRepository interface {
 	AddTalker(newTalker *talker.Talker) (*talker.Talker, error)
 	EditTalker(newTalker *talker.Talker) (*talker.Talker, error)
 	DeleteTalker(id int) error
+	SearchTalkers(search string) (*[]talker.Talker, error)
 }
 
 //TalkerRepository is the implementation of the talker repository
@@ -92,6 +94,7 @@ func (t *TalkerRepository) EditTalker(newTalker *talker.Talker) (*talker.Talker,
 	return newTalker, err
 }
 
+//DeleteTalker deletes a talker from the list of talkers by id
 func (t *TalkerRepository) DeleteTalker(id int) error {
 	jsonFile, err := readJSON()
 	if err == nil {
@@ -110,4 +113,30 @@ func (t *TalkerRepository) DeleteTalker(id int) error {
 		}
 	}
 	return err
+}
+
+// SearchTalkers searches for talkers by name
+func (t *TalkerRepository) SearchTalkers(search string) (*[]talker.Talker, error) {
+	jsonFile, err := readJSON()
+	fmt.Println(search)
+	if err == nil {
+		var talkers []talker.Talker
+		err = json.Unmarshal(jsonFile, &talkers)
+		if err == nil {
+			var talkersFound []talker.Talker
+			for _, v := range talkers {
+				fmt.Println(v.Name)
+				fmt.Println(strings.Contains(v.Name, search))
+				if strings.Contains(v.Name, search) {
+					talkersFound = append(talkersFound, v)
+				}
+			}
+			if len(talkersFound) > 0 {
+				return &talkersFound, nil
+			}
+			return &talkers, nil
+
+		}
+	}
+	return nil, err
 }
