@@ -118,15 +118,12 @@ func (t *TalkerRepository) DeleteTalker(id int) error {
 // SearchTalkers searches for talkers by name
 func (t *TalkerRepository) SearchTalkers(search string) (*[]talker.Talker, error) {
 	jsonFile, err := readJSON()
-	fmt.Println(search)
 	if err == nil {
 		var talkers []talker.Talker
 		err = json.Unmarshal(jsonFile, &talkers)
 		if err == nil {
 			var talkersFound []talker.Talker
 			for _, v := range talkers {
-				fmt.Println(v.Name)
-				fmt.Println(strings.Contains(v.Name, search))
 				if strings.Contains(v.Name, search) {
 					talkersFound = append(talkersFound, v)
 				}
