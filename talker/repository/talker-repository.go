@@ -43,10 +43,12 @@ func (t *TalkerRepository) GetTalkerByID(id int) (*talker.Talker, error) {
 	}
 	var talkers []talker.Talker
 	err = json.Unmarshal(jsonFile, &talkers)
+	res := talker.Talker{}
 	var talker *talker.Talker
 	for _, v := range talkers {
 		if v.ID == id {
-			talker = &v
+			res = v
+			talker = &res
 		}
 	}
 	return talker, err

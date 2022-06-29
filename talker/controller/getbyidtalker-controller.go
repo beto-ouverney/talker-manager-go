@@ -5,11 +5,13 @@ import (
 )
 
 // GetTalkerByID returns talker from Repository
-func GetTalkerByID(controller *TalkersController, id int) (talkerJSON []byte, err error) {
-	talker, err := controller.ITalkersUseCase.GetTalkerByID(id)
+func (tC *TalkersController) GetTalkerByID(id int) (talkerJSON []byte, err error) {
+	talker, err := tC.UseCase.GetTalkerByID(id)
 	if err != nil {
 		panic(err)
 	}
-	talkerJSON, err = json.Marshal(talker)
+	if talker != nil {
+		talkerJSON, err = json.MarshalIndent(talker, "", "    ")
+	}
 	return
 }

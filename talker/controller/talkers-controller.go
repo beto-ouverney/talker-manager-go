@@ -6,5 +6,5 @@ import (
 
 //TalkersController is the implementation of the talkers controller
 type TalkersController struct {
-	talkerusecase.ITalkersUseCase
+	UseCase talkerusecase.ITalkersUseCase
 }

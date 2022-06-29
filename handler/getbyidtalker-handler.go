@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"encoding/json"
 	"net/http"
 	"strconv"
 
@@ -21,15 +20,14 @@ func GetTalkerByIDHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		if talker != nil {
 			status = 200
-			talkerJSON, err := json.Marshal(talker)
 			if err != nil {
 				errorReturn(w, r, 500, err.Error())
 			}
-			response = talkerJSON
+			response = talker
 		} else {
 			status = 404
 
-			w.Write([]byte("{\"message\":\"Talker not found\"}"))
+			response = []byte("{\"message\":\"Talker not found\"}")
 		}
 	}
 

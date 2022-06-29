@@ -8,7 +8,7 @@ import (
 
 // EditTalker is a function that edits a talker
 func (controller *TalkersController) EditTalker(newTalker *talker.Talker) (talkerJSON []byte, err error) {
-	talker, err := controller.ITalkersUseCase.EditTalker(newTalker)
+	talker, err := controller.UseCase.EditTalker(newTalker)
 	if err == nil {
 		talkerJSON, err = json.Marshal(talker)
 	}
