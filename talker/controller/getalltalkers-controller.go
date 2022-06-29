@@ -10,6 +10,6 @@ func (tC *TalkersController) GetAllTalkers() (talkerJSON []byte, err error) {
 	if err != nil {
 		panic(err)
 	}
-	talkerJSON, err = json.Marshal(talkers)
+	talkerJSON, err = json.MarshalIndent(talkers, "", "    ")
 	return
 }
