@@ -28,8 +28,8 @@ type TestError struct {
 	Message string `json:"message"`
 }
 
-func TestGetTalkerByIDHandler(t *testing.T) {
-
+func TestGetTalkerByID(t *testing.T) {
+	assert := assert.New(t)
 	router := &myrouter.Router{}
 	router.Route(http.MethodGet, `/talkers/(?P<id>\d+)`, nil, handler.GetTalkerByIDHandler)
 
@@ -68,7 +68,8 @@ func TestGetTalkerByIDHandler(t *testing.T) {
 			var actual Talker
 			body := json.NewDecoder(rr.Body)
 			err = body.Decode(&actual)
-			assert.Equal(t, tt.expectedMessage, actual)
+			assert.Equal(tt.expectedStatus, rr.Code)
+			assert.Equal(tt.expectedMessage, actual)
 		})
 	}
 	t.Log("Error tests")
@@ -99,7 +100,8 @@ func TestGetTalkerByIDHandler(t *testing.T) {
 			var actual TestError
 			body := json.NewDecoder(rr.Body)
 			err = body.Decode(&actual)
-			assert.Equal(t, tt.expectedMessage, actual)
+			assert.Equal(tt.expectedStatus, rr.Code)
+			assert.Equal(tt.expectedMessage, actual)
 		})
 	}
 }

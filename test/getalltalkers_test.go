@@ -12,7 +12,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGetAllTalkersHandler(t *testing.T) {
+func TestGetAllTalkers(t *testing.T) {
+	assert := assert.New(t)
 	t.Log("It will be validated that the endpoint returns an array with all registered speakers")
 	jsonFile, err := os.ReadFile("./talkers.json")
 	if err != nil {
@@ -32,7 +33,7 @@ func TestGetAllTalkersHandler(t *testing.T) {
 	router.Route(http.MethodGet, `/talkers`, nil, handler.GetAllTalkersHandler)
 	router.ServeHTTP(rr, req)
 
-	assert.Equal(t, rr.Code, http.StatusOK)
+	assert.Equal(rr.Code, http.StatusOK)
 	jsonFileString := string(jsonFile[:])
-	assert.Equal(t, rr.Body.String(), jsonFileString)
+	assert.Equal(rr.Body.String(), jsonFileString)
 }
