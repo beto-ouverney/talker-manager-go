@@ -29,7 +29,7 @@ func TestGetAllTalkers(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	path := fmt.Sprintf("/%s", "talkers")
+	path := fmt.Sprintf("/%s", "talker")
 	req, err := http.NewRequest("GET", path, nil)
 	if err != nil {
 		t.Fatal(err)
@@ -37,7 +37,7 @@ func TestGetAllTalkers(t *testing.T) {
 	rr := httptest.NewRecorder()
 
 	router := &myrouter.Router{}
-	router.Route(http.MethodGet, `/talkers`, nil, handler.GetAllTalkersHandler)
+	router.Route(http.MethodGet, `/talker`, nil, handler.GetAllTalkersHandler)
 	router.ServeHTTP(rr, req)
 
 	assert.Equal(rr.Code, http.StatusOK)

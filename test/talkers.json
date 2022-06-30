@@ -1,10 +1,10 @@
 [
     {
-        "name": "Henrique Albuquerque",
-        "age": 62,
+        "name": "Alberto Ouverney Paz",
+        "age": 30,
         "id": 1,
         "talk": {
-            "watchedAt": "23/10/2020",
+            "watchedAt": "22/10/2025",
             "rate": 5
         }
     },
@@ -32,15 +32,6 @@
         "id": 4,
         "talk": {
             "watchedAt": "23/10/2020",
-            "rate": 5
-        }
-    },
-    {
-        "name": "Alberto Ouverney Paz",
-        "age": 30,
-        "id": 5,
-        "talk": {
-            "watchedAt": "22/10/2025",
             "rate": 5
         }
     }

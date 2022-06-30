@@ -16,7 +16,7 @@ func TestGetTalkerByID(t *testing.T) {
 	seedTalkers(t)
 
 	router := &myrouter.Router{}
-	router.Route(http.MethodGet, `/talkers/(?P<id>\d+)`, nil, handler.GetTalkerByIDHandler)
+	router.Route(http.MethodGet, `/talker/(?P<id>\d+)`, nil, handler.GetTalkerByIDHandler)
 
 	tests := []struct {
 		name            string
@@ -46,7 +46,7 @@ func TestGetTalkerByID(t *testing.T) {
 			assert := assert.New(t)
 
 			t.Log(tt.describe)
-			path := fmt.Sprintf("/talkers/%s", tt.id)
+			path := fmt.Sprintf("/talker/%s", tt.id)
 			req, err := http.NewRequest("GET", path, nil)
 			if err != nil {
 				t.Fatal(err)
@@ -81,7 +81,7 @@ func TestGetTalkerByID(t *testing.T) {
 			assert := assert.New(t)
 
 			t.Log(tt.describe)
-			path := fmt.Sprintf("/talkers/%s", tt.id)
+			path := fmt.Sprintf("/talker/%s", tt.id)
 			req, err := http.NewRequest("GET", path, nil)
 			if err != nil {
 				t.Fatal(err)

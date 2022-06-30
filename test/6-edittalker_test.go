@@ -3,6 +3,7 @@ package test
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -14,26 +15,17 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestCreateTalker(t *testing.T) {
+func TestEditTalker(t *testing.T) {
 	seedTalkers(t)
 
 	router := &myrouter.Router{}
-	router.Route(http.MethodPost, "/talker", []myrouter.Middleware{middleware.TokenValidate, middleware.TalkerValidate}, handler.AddTalkerHandler)
+	router.Route(http.MethodPut, `/talker/(?P<id>\d+)`, []myrouter.Middleware{middleware.TokenValidate, middleware.TalkerValidate}, handler.EditTalkerHandler)
 	router.Route(http.MethodPost, "/login", []myrouter.Middleware{middleware.UserValidate}, handler.GetUserTokenHandler)
-
-	type test struct {
-		name            string
-		describe        string
-		talker          Talker
-		expectedStatus  int
-		expectedMessage interface{}
-		jsonParams      []string
-		assertMessage   string
-	}
 
 	tests := []struct {
 		name            string
 		describe        string
+		ID              string
 		talker          Talker
 		expectedStatus  int
 		expectedMessage interface{}
@@ -41,8 +33,9 @@ func TestCreateTalker(t *testing.T) {
 		assertMessage   string
 	}{
 		{
-			name:     "Test 5.1",
-			describe: "It will be validated that it is possible to add a talker ",
+			name:     "Test 6.1",
+			describe: "It will be validated that it is possible to edit a talker ",
+			ID:       "1",
 			talker: Talker{
 				Name: "Alberto Ouverney Paz",
 				Age:  30,
@@ -51,21 +44,22 @@ func TestCreateTalker(t *testing.T) {
 					Rate:      5,
 				},
 			},
-			expectedStatus: 201,
+			expectedStatus: 200,
 			expectedMessage: Talker{
 				Name: "Alberto Ouverney Paz",
-				ID:   5,
+				ID:   1,
 				Age:  30,
 				Talk: Talk{
 					WatchedAt: "22/10/2025",
 					Rate:      5,
 				},
 			},
-			assertMessage: "Talker not added",
+			assertMessage: "Talker not edited",
 		},
 		{
-			name:     "Test 5.2",
-			describe: "It not will be validated that it is possible to add a talker without the name field ",
+			name:     "Test 6.2",
+			describe: "It not will be validated that it is possible to edit a talker without the name field ",
+			ID:       "4",
 			talker: Talker{
 				Age: 30,
 				Talk: Talk{
@@ -79,8 +73,9 @@ func TestCreateTalker(t *testing.T) {
 			assertMessage:   "Name is required",
 		},
 		{
-			name:     "Test 5.3",
-			describe: "It not will be validated that it is possible to add a talker without the age field ",
+			name:     "Test 6.3",
+			describe: "It not will be validated that it is possible to edit a talker without the age field ",
+			ID:       "1",
 			talker: Talker{
 				Name: "Alberto Ouverney Paz",
 				Talk: Talk{
@@ -94,8 +89,9 @@ func TestCreateTalker(t *testing.T) {
 			assertMessage:   "Age is required",
 		},
 		{
-			name:     "Test 5.4",
-			describe: "It not will be validated that it is possible to add a talker without the talk field ",
+			name:     "Test 6.4",
+			describe: "It not will be validated that it is possible to edit a talker without the talk field ",
+			ID:       "5",
 			talker: Talker{
 				Name: "Beto Ouverney Paz",
 				Age:  30,
@@ -106,8 +102,9 @@ func TestCreateTalker(t *testing.T) {
 			assertMessage:   "Talk is required",
 		},
 		{
-			name:     "Test 5.5",
-			describe: "It not will be validated that it is possible to add a talker without the watchedAt field ",
+			name:     "Test 6.5",
+			describe: "It not will be validated that it is possible to edit a talker without the watchedAt field ",
+			ID:       "3",
 			talker: Talker{
 				Name: "Beto Ouverney",
 				Age:  30,
@@ -121,8 +118,9 @@ func TestCreateTalker(t *testing.T) {
 			assertMessage:   "WatchedAt is required",
 		},
 		{
-			name:     "Test 5.6",
-			describe: "It not will be validated that it is possible to add a talker without the rate field ",
+			name:     "Test 6.6",
+			describe: "It not will be validated that it is possible to edit a talker without the rate field ",
+			ID:       "1",
 			talker: Talker{
 				Name: "Alberto Ouverney Paz",
 				Age:  30,
@@ -136,8 +134,9 @@ func TestCreateTalker(t *testing.T) {
 			assertMessage:   "Rate is required",
 		},
 		{
-			name:     "Test 5.7",
-			describe: "It not will be validated that it is possible to add a talker with a invalid age ",
+			name:     "Test 6.7",
+			describe: "It not will be validated that it is possible to edit a talker with a invalid age ",
+			ID:       "2",
 			talker: Talker{
 				Name: "Alberto Ouverney Paz",
 				Age:  1,
@@ -152,8 +151,9 @@ func TestCreateTalker(t *testing.T) {
 			assertMessage:   "Age must be greater than or equal to 18",
 		},
 		{
-			name:     "Test 5.8",
-			describe: "It not will be validated that it is possible to add a talker with a invalid rate ",
+			name:     "Test 6.8",
+			describe: "It not will be validated that it is possible to edit a talker with a invalid rate ",
+			ID:       "3",
 			talker: Talker{
 				Name: "Alberto Ouverney Paz",
 				Age:  30,
@@ -168,8 +168,9 @@ func TestCreateTalker(t *testing.T) {
 			assertMessage:   "The \"rate\" field must be an integer from 1 to 5",
 		},
 		{
-			name:     "Test 5.9",
-			describe: "It not will be validated that it is possible to add a talker with a invalid watchedAt ",
+			name:     "Test 6.9",
+			describe: "It not will be validated that it is possible to edit a talker with a invalid watchedAt ",
+			ID:       "1",
 			talker: Talker{
 				Name: "Alberto Ouverney Paz",
 				Age:  30,
@@ -184,8 +185,9 @@ func TestCreateTalker(t *testing.T) {
 			assertMessage:   "WatchedAt must be a valid date with \"dd/mm/yyyy\" format",
 		},
 		{
-			name:     "Test 5.9",
-			describe: "It not will be validated that it is possible to add a talker with a invalid watchedAt ",
+			name:     "Test 6.9",
+			describe: "It not will be validated that it is possible to edit a talker with a invalid watchedAt ",
+			ID:       "1",
 			talker: Talker{
 				Name: "Alberto Ouverney Paz",
 				Age:  30,
@@ -200,8 +202,9 @@ func TestCreateTalker(t *testing.T) {
 			assertMessage:   "WatchedAt must be a valid date with \"dd/mm/yyyy\" format",
 		},
 		{
-			name:     "Test 5.9",
-			describe: "It not will be validated that it is possible to add a talker with a invalid watchedAt ",
+			name:     "Test 6.9",
+			describe: "It not will be validated that it is possible to edit a talker with a invalid watchedAt ",
+			ID:       "3",
 			talker: Talker{
 				Name: "Alberto Ouverney Paz",
 				Age:  30,
@@ -244,8 +247,11 @@ func TestCreateTalker(t *testing.T) {
 			}
 
 			data, err := json.Marshal(test.talker)
-
-			req, err := http.NewRequest("POST", "/talker", bytes.NewBuffer(data))
+			if err != nil {
+				t.Fatal(err)
+			}
+			path := fmt.Sprintf("/talker/%s", test.ID)
+			req, err := http.NewRequest(http.MethodPut, path, bytes.NewBuffer(data))
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -254,10 +260,9 @@ func TestCreateTalker(t *testing.T) {
 
 			rr := httptest.NewRecorder()
 			router.ServeHTTP(rr, req)
-
 			assert.Equal(test.expectedStatus, rr.Code, "Status code should be equal")
 
-			if rr.Code == 201 {
+			if rr.Code == 200 {
 				var actual Talker
 				err = json.NewDecoder(rr.Body).Decode(&actual)
 				if err != nil {
