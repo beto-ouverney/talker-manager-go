@@ -1,4 +1,4 @@
-package tests
+package test
 
 import (
 	"encoding/json"
@@ -12,24 +12,9 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-type Talk struct {
-	WatchedAt string `json:"watchedAt"`
-	Rate      int    `json:"rate"`
-}
-
-type Talker struct {
-	Name string `json:"name"`
-	Age  int    `json:"age"`
-	ID   int    `json:"id"`
-	Talk Talk   `json:"talk"`
-}
-
-type TestError struct {
-	Message string `json:"message"`
-}
-
 func TestGetTalkerByID(t *testing.T) {
-	assert := assert.New(t)
+	seedTalkers(t)
+
 	router := &myrouter.Router{}
 	router.Route(http.MethodGet, `/talkers/(?P<id>\d+)`, nil, handler.GetTalkerByIDHandler)
 
@@ -40,7 +25,7 @@ func TestGetTalkerByID(t *testing.T) {
 		expectedStatus  int
 		expectedMessage interface{}
 	}{
-		{name: "Test 1.1",
+		{name: "Test 2.1",
 			describe:       " => Describe: It will validate that the endpoint returns a speaker person based on the route id",
 			id:             "1",
 			expectedStatus: 200,
@@ -57,6 +42,9 @@ func TestGetTalkerByID(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+
+			assert := assert.New(t)
+
 			t.Log(tt.describe)
 			path := fmt.Sprintf("/talkers/%s", tt.id)
 			req, err := http.NewRequest("GET", path, nil)
@@ -81,7 +69,7 @@ func TestGetTalkerByID(t *testing.T) {
 		expectedMessage interface{}
 	}{
 
-		{name: "Test 2.1",
+		{name: "Test 2.2",
 			describe:        " => Describe: It will be validated that the endpoint returns an error if no speaker is found",
 			id:              "999",
 			expectedStatus:  404,
@@ -89,6 +77,9 @@ func TestGetTalkerByID(t *testing.T) {
 	}
 	for _, tt := range testsError {
 		t.Run(tt.name, func(t *testing.T) {
+
+			assert := assert.New(t)
+
 			t.Log(tt.describe)
 			path := fmt.Sprintf("/talkers/%s", tt.id)
 			req, err := http.NewRequest("GET", path, nil)

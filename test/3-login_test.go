@@ -1,4 +1,4 @@
-package tests
+package test
 
 import (
 	"bytes"
@@ -35,7 +35,7 @@ func TestLoginEndPoint(t *testing.T) {
 		expectedStatus  int
 		expectedMessage interface{}
 	}{
-		name:     "Test 1.1",
+		name:     "Test 3.1",
 		describe: " => It will validate that the endpoint must be able to return a token with random 16 characters ",
 		args: []User{
 			{Email: "deferiascomigo@gmail.com",
@@ -48,8 +48,10 @@ func TestLoginEndPoint(t *testing.T) {
 		expectedStatus: 200,
 	}
 	tokens := make([]token, 5)
-	assert := assert.New(t)
 	t.Run(test.name, func(t *testing.T) {
+
+		assert := assert.New(t)
+
 		t.Log(test.describe)
 		for _, user := range test.args {
 			data, err := json.Marshal(user)
@@ -72,7 +74,10 @@ func TestLoginEndPoint(t *testing.T) {
 			tokens = append(tokens, actual)
 		}
 	})
-	t.Run("Test 1.2", func(t *testing.T) {
+	t.Run("Test 3.2", func(t *testing.T) {
+
+		assert := assert.New(t)
+
 		t.Log("It will validate that the endpoint must be able to return token with random 16 characters")
 		sort.Slice(tokens, func(a, b int) bool { return tokens[a].Token < tokens[b].Token })
 

@@ -1,4 +1,4 @@
-package tests
+package test
 
 import (
 	"bytes"
@@ -15,8 +15,6 @@ import (
 
 func TestLoginValidations(t *testing.T) {
 
-	assert := assert.New(t)
-
 	router := &myrouter.Router{}
 	router.Route(http.MethodPost, "/login", []myrouter.Middleware{middleware.UserValidate}, handler.GetUserTokenHandler)
 
@@ -31,7 +29,7 @@ func TestLoginValidations(t *testing.T) {
 		name string
 		args []arg
 	}{
-		name: "Test 1.1",
+		name: "Test 4.1",
 		args: []arg{
 			{
 				describe:        " => It will be validated that it is not possible to login without the email field ",
@@ -49,6 +47,8 @@ func TestLoginValidations(t *testing.T) {
 	}
 
 	t.Run(test.name, func(t *testing.T) {
+
+		assert := assert.New(t)
 		for _, tes := range test.args {
 			t.Log(tes.describe)
 			data, err := json.Marshal(tes.user)
@@ -71,12 +71,13 @@ func TestLoginValidations(t *testing.T) {
 		}
 	})
 
-	t.Run("Test 1.2", func(t *testing.T) {
+	t.Run("Test 4.2", func(t *testing.T) {
+
+		assert := assert.New(t)
+
 		t.Log(" => It will be validated that it is not possible to login with an invalid email address ")
 		user := User{Email: "not an email", Password: "12345678"}
 		data, err := json.Marshal(user)
-		str1 := bytes.NewBuffer(data).String()
-		t.Log(str1)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -96,7 +97,10 @@ func TestLoginValidations(t *testing.T) {
 
 	})
 
-	t.Run("Test 1.3", func(t *testing.T) {
+	t.Run("Test 4.3", func(t *testing.T) {
+
+		assert := assert.New(t)
+
 		t.Log(" => It will be validated that it is not possible to login with the password field shorter than 6 characters")
 		user := User{Email: "nhg@gmail.com", Password: "12345"}
 		data, err := json.Marshal(user)

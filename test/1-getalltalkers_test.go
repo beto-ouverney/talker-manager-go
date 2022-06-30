@@ -1,6 +1,7 @@
-package tests
+package test
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -13,9 +14,15 @@ import (
 )
 
 func TestGetAllTalkers(t *testing.T) {
+	seedTalkers(t)
+
 	assert := assert.New(t)
+
 	t.Log("It will be validated that the endpoint returns an array with all registered speakers")
+
 	jsonFile, err := os.ReadFile("./talkers.json")
+	var talkers []Talker
+	err = json.Unmarshal(jsonFile, &talkers)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -34,6 +41,12 @@ func TestGetAllTalkers(t *testing.T) {
 	router.ServeHTTP(rr, req)
 
 	assert.Equal(rr.Code, http.StatusOK)
-	jsonFileString := string(jsonFile[:])
-	assert.Equal(rr.Body.String(), jsonFileString)
+
+	var actual []Talker
+	body := json.NewDecoder(rr.Body)
+	err = body.Decode(&actual)
+	if err != nil {
+		t.Fatal(err)
+	}
+	assert.Equal(talkers, actual)
 }
