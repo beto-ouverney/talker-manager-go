@@ -14,6 +14,12 @@ func isTokenValid(e string) bool {
 
 //TokenValidate is a middleware that validates the token
 func TokenValidate(header map[string][]string, decoder *json.Decoder) (ok bool, status int, message string) {
+	if header["Authorization"] == nil {
+		ok = false
+		status = errorschema.ErrorResponse["tokenNotFound"].Status
+		message = errorschema.ErrorResponse["tokenNotFound"].Message
+		return
+	}
 	token := header["Authorization"][0]
 
 	if len(token) == 0 {

@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
 )
 
@@ -9,6 +8,5 @@ import (
 func URLParam(r *http.Request, name string) string {
 	ctx := r.Context()
 	params := ctx.Value("params").(map[string]string)
-	fmt.Println(params)
 	return params[name]
 }

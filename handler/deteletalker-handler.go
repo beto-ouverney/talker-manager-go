@@ -17,9 +17,14 @@ func DeleteTalkerHandler(w http.ResponseWriter, r *http.Request) {
 			talkerIntegration := talkerintegration.TalkersIntegration()
 			err := talkerIntegration.DeleteTalker(id)
 			if err == nil {
-				status = 200
+				status = 204
 				response = nil
 
+			} else if err.Error() == "Talker not found" {
+				status = 404
+				response = []byte("{\"message\":\"Talker not found\"}")
+			} else {
+				errorReturn(w, r, 500, err.Error())
 			}
 		}
 

@@ -14,6 +14,7 @@ func SearchTalkersHandler(w http.ResponseWriter, r *http.Request) {
 		query := r.URL.Query().Get("q")
 		talkerIntegration := talkerintegration.TalkersIntegration()
 		talkers, err := talkerIntegration.SearchTalkers(query)
+
 		if err == nil {
 			status = 200
 			response = talkers

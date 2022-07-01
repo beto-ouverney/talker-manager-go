@@ -2,7 +2,7 @@ package talkerrepository
 
 import (
 	"encoding/json"
-	"fmt"
+	"errors"
 	"sort"
 	"strings"
 
@@ -77,7 +77,6 @@ func (t *TalkerRepository) AddTalker(newTalker *talker.Talker) (*talker.Talker, 
 // EditTalker edits a talker
 func (t *TalkerRepository) EditTalker(newTalker *talker.Talker) (*talker.Talker, error) {
 	jsonFile, err := readJSON()
-	fmt.Printf("%+v\n", newTalker)
 	if err == nil {
 		var talkers []talker.Talker
 		err = json.Unmarshal(jsonFile, &talkers)
@@ -106,14 +105,18 @@ func (t *TalkerRepository) DeleteTalker(id int) error {
 			for i, v := range talkers {
 				if v.ID == id {
 					talkers = append(talkers[:i], talkers[i+1:]...)
+					jsonFile, err = json.MarshalIndent(talkers, "", "    ")
+					if err == nil {
+						err = writeJSON(jsonFile)
+						if err == nil {
+							return err
+						}
+					}
 				}
-			}
-			jsonFile, err = json.MarshalIndent(talkers, "", "    ")
-			if err == nil {
-				err = writeJSON(jsonFile)
 			}
 		}
 	}
+	err = errors.New("Talker not found")
 	return err
 }
 
@@ -123,18 +126,23 @@ func (t *TalkerRepository) SearchTalkers(search string) (*[]talker.Talker, error
 	if err == nil {
 		var talkers []talker.Talker
 		err = json.Unmarshal(jsonFile, &talkers)
+		if search == "" {
+			return &talkers, err
+		}
 		if err == nil {
 			var talkersFound []talker.Talker
 			for _, v := range talkers {
-				if strings.Contains(v.Name, search) {
+				str1 := strings.ToLower(v.Name)
+				str2 := strings.ToLower(search)
+				if strings.Contains(str1, str2) {
 					talkersFound = append(talkersFound, v)
 				}
 			}
-			if len(talkersFound) > 0 {
+			if len(talkersFound) == 0 {
+				talkersFound := make([]talker.Talker, 0)
 				return &talkersFound, nil
 			}
-			return &talkers, nil
-
+			return &talkersFound, nil
 		}
 	}
 	return nil, err
