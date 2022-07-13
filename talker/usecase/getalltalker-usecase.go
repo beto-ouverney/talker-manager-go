@@ -5,7 +5,7 @@ import (
 )
 
 //GetAllTalkers returns all the talkers from Repository
-func (useCase *TalkersUseCase) GetAllTalkers() (*[]talker.Talker, error) {
-	talkers, err := useCase.Repo.GetAllTalkers()
-	return talkers, err
+func (useCase *TalkersUseCase) GetAllTalkers() (talkers *[]talker.Talker, err error) {
+	talkers, err = useCase.Repo.GetAllTalkers()
+	return
 }
